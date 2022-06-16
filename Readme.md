@@ -1,0 +1,3 @@
+Composer init
+Composer install
+Composer require cloudinary/cloudinary_php

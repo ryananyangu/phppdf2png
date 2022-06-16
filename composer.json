@@ -1,0 +1,12 @@
+{
+    "name": "rashiruma/returntophp",
+    "authors": [
+        {
+            "name": "Ryan Ashiruma",
+            "email": "ryananyangu@gmail.com"
+        }
+    ],
+    "require": {
+        "cloudinary/cloudinary_php": "^2.7"
+    }
+}
