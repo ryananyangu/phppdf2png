@@ -84,9 +84,6 @@ if (isset($_POST['page_no']) && isset($_FILES['upload_file'])){
         </div>
     </form>
  
- 
-    
- 
     <div class="col">
         <?php if(isset($_FILES['upload_file'])){ ?>
             <img class="img-fluid" src="<?=$resp['url']?>" alt="response">
@@ -95,7 +92,6 @@ if (isset($_POST['page_no']) && isset($_FILES['upload_file'])){
         <?php  } ?>
     </div>
   </main>
- 
 </div>
   </body>
 </html>
