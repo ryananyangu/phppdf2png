@@ -30,7 +30,7 @@ Follow the composer procedure which will help hand'e the necessary project depen
 [Cloudinary](https://cloudinary.com/?ap=em) reffers an end-to-end image and video-management solution for websites and mobile apps, covering everything from image and video uploads, storage, manipulations, optimizations to delivery.Our app will use the media file online upload feature.
 To begin, click [here](https://cloudinary.com/console) to set up a new account or log into an existing one. We use the environment keys from the user dashboard to intergrate Cloudinary with our project. We will create a file named `env` and use the guide below to fill in the project configuration.
 
-```
+```bash
       CLOUDINARY_NAME=
       CLOUDINARY_API_KEY=
       CLOUDINARY_API_SECRET=
@@ -38,7 +38,7 @@ To begin, click [here](https://cloudinary.com/console) to set up a new account o
 ```
 Our app will include 2 sections; `html` and `php`. Start by creating a directory `index.php` and including the following:
 
-```
+```php
 "index.php"
 
 
@@ -105,27 +105,25 @@ Now to the php section:
 
 Start by importing cloudinary.
 
-```
-<?php
+```php
+
 include_once __DIR__ . '/vendor/autoload.php';
 
 use Cloudinary\Api\Upload\UploadApi;
 use Cloudinary\Configuration\Configuration;
-?>
-
-Confirm values for page number to be extracted and the file selection are okay
-
 ```
+
+Confirm the post request has all the required parameters with values
+
+```php
 
 if (isset($_POST['page_no']) && isset($_FILES['upload_file'])){
 
 }
 ```
-Instanciate Cloudinary
+Instanciate Cloudinary sdk instance with credentials from env
 
-```
-
-if (isset($_POST['page_no']) && isset($_FILES['upload_file'])){
+```php
  Configuration::instance([
         'cloud' => [
             'cloud_name' => getenv("CLOUDINARY_NAME"),
@@ -136,45 +134,19 @@ if (isset($_POST['page_no']) && isset($_FILES['upload_file'])){
             'secure' => true
         ]
     ]);
-}
 ```
 
-Include the temporary file Storage location
+Extract the temporary file location for the uploaded file
 
-```
-
-if (isset($_POST['page_no']) && isset($_FILES['upload_file'])){
- Configuration::instance([
-        'cloud' => [
-            'cloud_name' => getenv("CLOUDINARY_NAME"),
-            'api_key' => getenv("CLOUDINARY_API_KEY"),
-            'api_secret' => getenv("CLOUDINARY_API_SECRET")
-        ],
-        'url' => [
-            'secure' => true
-        ]
-    ]);
-}
+```php
 
 $file_tmp= $_FILES['upload_file']['tmp_name'];
 
 ```
-Get the file contents and encode them to base64 
+Use the file location earlier extracter to generate the base64 encoded string equivalent for the
+uploaded file.
 
-```
-
-if (isset($_POST['page_no']) && isset($_FILES['upload_file'])){
- Configuration::instance([
-        'cloud' => [
-            'cloud_name' => getenv("CLOUDINARY_NAME"),
-            'api_key' => getenv("CLOUDINARY_API_KEY"),
-            'api_secret' => getenv("CLOUDINARY_API_SECRET")
-        ],
-        'url' => [
-            'secure' => true
-        ]
-    ]);
-}
+```php
 
 $file_tmp= $_FILES['upload_file']['tmp_name'];
 
@@ -183,41 +155,26 @@ $base64 = 'data:application/pdf;base64,' . base64_encode($data);
 
 ```
 
-Upload the media file as png to the
+Upload the base64 string to cloudinary and apply transformation to convert the 
+file to image png.
+Additional options have been explained using the comments on the code snippet
 
-```
+```php
 
-if (isset($_POST['page_no']) && isset($_FILES['upload_file'])){
- Configuration::instance([
-        'cloud' => [
-            'cloud_name' => getenv("CLOUDINARY_NAME"),
-            'api_key' => getenv("CLOUDINARY_API_KEY"),
-            'api_secret' => getenv("CLOUDINARY_API_SECRET")
-        ],
-        'url' => [
-            'secure' => true
-        ]
-    ]);
-}
-
-$file_tmp= $_FILES['upload_file']['tmp_name'];
-
-$data = file_get_contents($file_tmp);
-$base64 = 'data:application/pdf;base64,' . base64_encode($data);
 
 $resp = (new UploadApi())->upload($base64, [
 		'resource_type' => 'image',
         'format'=> 'png', // for the transformation
         'async' => false, // api to return the final status within the same session
         'type' => 'upload', 
-	]
+	])
 
 ```
 
 Thats it! Your finel code should look like below:
 
-```
-<?php
+```php
+
 include_once __DIR__ . '/vendor/autoload.php';
 
 use Cloudinary\Api\Upload\UploadApi;
@@ -260,7 +217,6 @@ if (isset($_POST['page_no']) && isset($_FILES['upload_file'])){
 
 }
 
-?>
 <!doctype html>
 <html lang="en">
   <head>
